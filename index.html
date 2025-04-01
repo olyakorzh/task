@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="">
+    <title>Document</title>
+</head>
+
+
+<style>
+
+    #buttonAdd {
+        background-color:  orange;
+        border-radius: 70px;
+        border-width: 0;
+        width: 150px;
+        height: 20px;
+}
+
+    input {
+        width: 200px;
+        height: 20px;
+        /* border-radius: 20px; */
+
+        /* border-color: rgb(231, 201, 149);  */
+}
+
+    #buttonClean {
+        margin-top: 50px;
+        margin-left: 200px;
+        border-radius: 70px;
+        border-width: 0;
+        background-color:  rgb(150, 235, 240);
+
+        
+}
+
+    h1 {
+        margin-left: 500px;
+    }
+
+    #elementsToAdd {
+        margin-left: 500px;
+    }
+
+    #elementsToClean {
+        margin-left: 500px;
+    }
+
+    li {
+        list-style-type: none;
+    }
+</style>
+
+<body>
+
+    <h1>Добавить задачу</h1>
+
+    <div id="elementsToAdd">
+        <input type="task" placeholder="Задача" id="input"/>
+        <button id="buttonAdd">Добавить</button>
+    </div>
+
+    <div id="elementsToClean">
+        <h2>Список задач</h2>
+
+        <ul id="taskList"></ul>
+        
+        <div>
+            <button id="buttonClean" disabled>Очистить список задач</button>
+        </div>
+    </div>
+
+
+    <script>
+
+        const taskList = document.getElementById('taskList');
+        const buttonClean= document.getElementById('buttonClean');
+        const buttonAdd = document.getElementById('buttonAdd');
+        const input= document.getElementById('input');
+
+
+        document.addEventListener('DOMContentLoaded', () =>{ 
+
+        const loadData = () => {
+            let tasks = JSON.parse(localStorage.getItem('tasksList')) || [];
+            return tasks;
+        };
+
+        const renderList = () => {
+            // taskList.innerHTML = '';
+            let tasks = loadData();
+            if(tasks.length === 0) {
+                taskList.innerHTML = `<p>Задач нет</p>`;
+                buttonClean.disabled = true;
+            } else {
+                buttonClean.disabled = false;
+                tasks.forEach((task, index) => {
+                    // let taskText = document.getElementById('input');
+                    let listItem = document.createElement('li');
+                    // listItem.classList.add('list');
+                    // listItem.textContent = taskText.value;
+                    listItem.textContent = task.text;
+                    taskList.append(listItem);
+
+                    let checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = task.completed;
+                    checkbox.addEventListener('change', () => {
+                        // task[index].completed = true;
+                        task[index].completed = !task[index].completed;
+                        localStorage.setItem('tasksList', JSON.stringify(tasks));
+                    });
+                    listItem.append(checkbox)
+                });
+            }
+        };
+        
+        const addTask = () => {
+            // const taskText = document.getElementById('input');
+            const taskText = input.value;
+
+            let tasks = loadData();
+            tasks.push({text: taskText, completed: false});
+            localStorage.setItem('tasksList', JSON.stringify(tasks));
+            taskText.value = '';
+            renderList();
+        };
+
+        const clearTask = () => {
+            localStorage.removeItem('tasks');
+            renderList();
+        };
+
+
+        buttonAdd.addEventListener('click', addTask);
+        buttonClean.addEventListener('click', clearTask);
+        
+        renderList();
+        // document.addEventListener('DOMContentLoaded', renderList);
+    });
+    </script>
+</html> 
