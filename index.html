@@ -90,7 +90,7 @@
         };
 
         const renderList = () => {
-            // taskList.innerHTML = '';
+            taskList.innerHTML = '';
             let tasks = loadData();
             if(tasks.length === 0) {
                 taskList.innerHTML = `<p>Задач нет</p>`;
@@ -113,7 +113,7 @@
                         task[index].completed = !task[index].completed;
                         localStorage.setItem('tasksList', JSON.stringify(tasks));
                     });
-                    listItem.append(checkbox)
+                    // listItem.append(checkbox)
                 });
             }
         };
@@ -125,12 +125,13 @@
             let tasks = loadData();
             tasks.push({text: taskText, completed: false});
             localStorage.setItem('tasksList', JSON.stringify(tasks));
-            taskText.value = '';
+            // taskText.value = '';
+            input.value = '';
             renderList();
         };
 
         const clearTask = () => {
-            localStorage.removeItem('tasks');
+            localStorage.removeItem('tasksList');
             renderList();
         };
 
@@ -139,7 +140,6 @@
         buttonClean.addEventListener('click', clearTask);
         
         renderList();
-        // document.addEventListener('DOMContentLoaded', renderList);
     });
     </script>
 </html> 
