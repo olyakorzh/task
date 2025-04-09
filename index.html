@@ -76,13 +76,15 @@
 
     <script>
 
+        
+        document.addEventListener('DOMContentLoaded', () =>{ 
+
         const taskList = document.getElementById('taskList');
         const buttonClean= document.getElementById('buttonClean');
         const buttonAdd = document.getElementById('buttonAdd');
         const input= document.getElementById('input');
 
 
-        document.addEventListener('DOMContentLoaded', () =>{ 
 
         const loadData = () => {
             let tasks = JSON.parse(localStorage.getItem('tasksList')) || [];
@@ -94,6 +96,7 @@
             let tasks = loadData();
             if(tasks.length === 0) {
                 taskList.innerHTML = `<p>Задач нет</p>`;
+                // лучше делать одним видом (createElement)
                 buttonClean.disabled = true;
             } else {
                 buttonClean.disabled = false;
@@ -110,10 +113,11 @@
                     checkbox.checked = task.completed;
                     checkbox.addEventListener('change', () => {
                         // task[index].completed = true;
-                        task[index].completed = !task[index].completed;
+                        // tasks[index].completed
+                        task.completed = !task.completed;
                         localStorage.setItem('tasksList', JSON.stringify(tasks));
                     });
-                    // listItem.append(checkbox)
+                    listItem.append(checkbox)
                 });
             }
         };
@@ -121,6 +125,10 @@
         const addTask = () => {
             // const taskText = document.getElementById('input');
             const taskText = input.value;
+            if (input.value.trim() === '') {
+                return
+            }
+            // trim использовать для проверки пустого поля
 
             let tasks = loadData();
             tasks.push({text: taskText, completed: false});
